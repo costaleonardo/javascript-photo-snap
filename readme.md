@@ -1,6 +1,6 @@
 # Photo Snap
 
-> Take photos from your browser along with various filters.
+> Snap selfies from your browser along with various filters.
 
 ## Usage
 

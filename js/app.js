@@ -1,29 +1,38 @@
-// Global Variables
-// --------------------
-let width = 500,
-    height = 0,
-    filter = 'none',
+/**
+  * Photo Snap
+  * Snap selfies from the browser with filters.
+  *
+  * Author: Leonardo Da Costa
+  * Date: 08/05/18
+  * License: MIT
+  *
+  **/
+
+// --------- Global Variables --------- //
+
+let width     = 500,
+    height    = 0,
+    filter    = 'none',
     streaming = false;
 
-// DOM Elements
-const video = document.getElementById('video');
-const canvas = document.getElementById('canvas');
-const photos = document.getElementById('photos');
-const photoButton = document.getElementById('photo-button');
-const clearButton = document.getElementById('clear-button');
-const photoFilter = document.getElementById('photo-filter');
+// Cache DOM
+const video       = document.getElementById('video'),
+      canvas      = document.getElementById('canvas'),
+      photos      = document.getElementById('photos'),
+      photoButton = document.getElementById('photo-button'),
+      clearButton = document.getElementById('clear-button'),
+      photoFilter = document.getElementById('photo-filter');
 
-// Get media stream
-navigator.mediaDevices.getUserMedia({video: true, audio: false})
-  .then((stream) => {
+// --------- Events --------- //
+
+navigator.mediaDevices.getUserMedia({ video: true})
+  .then(stream => {
     // Link to the video source
     video.srcObject = stream;
     // Play video
     video.play();
   })
-  .catch(e => {
-    console.log(`Error: ${e}`);
-  });
+  .catch(e => console.log(`Error: ${e}`));
 
 // Play when ready
 video.addEventListener('canplay', e => {
@@ -40,24 +49,25 @@ video.addEventListener('canplay', e => {
   }
 }, false);
 
-// Photo button event
+// Listen for click on photo button
 photoButton.addEventListener('click', e => {
-  takePicture();
-
+  // Prevent default behaviour
   e.preventDefault();
+
+  takePicture();
 }, false);
 
-// Filter event
+// Listen for change on filter
 photoFilter.addEventListener('change', e => {
+  e.preventDefault();
+
   // Set filter to chosen option
   filter = e.target.value;
   // Set filter to video
   video.style.filter = filter;
-
-  e.preventDefault();
 });
 
-// Clear event
+// Listen for click on clear
 clearButton.addEventListener('click', e => {
   // Clear photos
   photos.innerHTML = '';
@@ -69,11 +79,11 @@ clearButton.addEventListener('click', e => {
   photoFilter.selectedIndex = 0;
 });
 
-// Take picture from canvas
+// Take piture from canvas
 const takePicture = () => {
   // Create canvas
   const context = canvas.getContext('2d');
-
+  // Check for width & height
   if (width && height) {
     // Set canvas props
     canvas.width = width;
@@ -86,14 +96,12 @@ const takePicture = () => {
 
     // Create img element
     const img = document.createElement('img');
-
     // Set img src
     img.setAttribute('src', imgUrl);
-
-    // Set image filter
+    // Set img filter
     img.style.filter = filter;
 
-    // Add image to photos
+    // Add img to photos
     photos.appendChild(img);
   }
 };
